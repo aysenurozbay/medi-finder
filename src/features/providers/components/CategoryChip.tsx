@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
 
   selected: {
     borderColor: "#acacac",
-    borderWidth: 2,
+    borderWidth: 1,
   },
 
   label: {

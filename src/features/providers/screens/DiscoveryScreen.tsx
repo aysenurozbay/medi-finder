@@ -60,7 +60,10 @@ export default function DiscoveryScreen({ navigation }: any) {
   };
 
   const renderItem = ({ item }: any) => (
-    <Pressable style={styles.card}>
+    <Pressable
+      style={styles.card}
+      onPress={() => navigation.navigate("ProviderDetail", { provider: item })}
+    >
       <Text style={styles.name}>{item.name}</Text>
       <Text style={styles.specialty}>{item.specialty}</Text>
       <Text style={styles.location}>
@@ -220,7 +223,7 @@ const styles = StyleSheet.create({
   },
 
   filterTag: {
-    backgroundColor: "#fff",
+    backgroundColor: "#ffed66",
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 12,

@@ -15,7 +15,7 @@ export default function RootNavigator() {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Profile"
+        name="ProviderDetail"
         component={ProviderDetailScreen}
         options={{ headerShown: false }}
       />

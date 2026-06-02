@@ -30,23 +30,28 @@ export default function ProviderDetailScreen({ onBack }: any) {
         <Pressable onPress={onBack}>
           <Text style={styles.back}>←</Text>
         </Pressable>
-
-        <Text style={styles.title}>Profile</Text>
-        <View style={{ width: 24 }} />
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* PROFILE */}
         <View style={styles.profile}>
-          <Image source={{ uri: PROVIDER.image }} style={styles.avatar} />
-
-          <Text style={styles.name}>{PROVIDER.name}</Text>
-          <Text style={styles.sub}>{PROVIDER.specialty}</Text>
-          <Text style={styles.meta}>
-            📍 {PROVIDER.location} • ⭐ {PROVIDER.rating}
-          </Text>
+          <View style={styles.providerDetail}>
+            <Image source={{ uri: PROVIDER.image }} style={styles.avatar} />
+            <View style={styles.info}>
+              <Text style={styles.name}>{PROVIDER.name}</Text>
+              <Text style={styles.sub}>{PROVIDER.specialty}</Text>
+              <Text style={styles.meta}>
+                📍 {PROVIDER.location} • ⭐ {PROVIDER.rating}
+              </Text>
+            </View>
+          </View>
         </View>
-
+        {/* STATS */}
+        <View style={styles.stats}>
+          <Stat label="Experience" value={`${PROVIDER.yearsExperience}+`} />
+          <Stat label="Patients" value={PROVIDER.patients} />
+          <Stat label="Satisfaction" value={`${PROVIDER.satisfaction}%`} />
+        </View>
         {/* ABOUT */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>About</Text>
@@ -60,13 +65,6 @@ export default function ProviderDetailScreen({ onBack }: any) {
               {showFullAbout ? "Show less" : "Read more"}
             </Text>
           </Pressable>
-        </View>
-
-        {/* STATS */}
-        <View style={styles.stats}>
-          <Stat label="Experience" value={`${PROVIDER.yearsExperience}+`} />
-          <Stat label="Patients" value={PROVIDER.patients} />
-          <Stat label="Satisfaction" value={`${PROVIDER.satisfaction}%`} />
         </View>
 
         {/* CONTACT */}
@@ -106,7 +104,7 @@ function Stat({ label, value }: any) {
   );
 }
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#F6F3EF" },
+  container: { flex: 1 },
 
   header: {
     flexDirection: "row",
@@ -119,8 +117,14 @@ const styles = StyleSheet.create({
   title: { fontSize: 18, fontWeight: "600" },
 
   profile: {
-    alignItems: "center",
-    paddingVertical: 20,
+    paddingBottom: 20,
+  },
+  providerDetail: {
+    flexDirection: "row",
+  },
+  info: {
+    marginLeft: 16,
+    justifyContent: "center",
   },
 
   avatar: {
@@ -155,7 +159,6 @@ const styles = StyleSheet.create({
   stats: {
     flexDirection: "row",
     justifyContent: "space-around",
-    padding: 16,
   },
 
   stat: {
