@@ -11,7 +11,6 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 
 import CategoryChip from "../components/CategoryChip";
-import { providers } from "../services/mockProviders";
 import { SPECIALTIES } from "../../../shared/constants/specialties";
 import { ProviderType, Specialty } from "../types";
 import FilterModal from "../components/FilterModal";
@@ -22,6 +21,8 @@ import {
 } from "../../../shared/utils/getLocation";
 import Screen from "../../../shared/components/layout/Screen";
 import EmptyState from "../../../shared/components/ui/EmptyState";
+import { useFilteredProviders } from "../hooks/useFilteredProviders";
+import { providers } from "../services/mock/providerData";
 
 /**
  * ✅ TEK VE NET TYPE
@@ -54,43 +55,11 @@ export default function DiscoveryScreen({ navigation }: any) {
 
   const openFilter = () => setFilterOpen(true);
 
-  const filteredProviders = useMemo(() => {
-    let result = providers.filter((p) => {
-      const matchesSearch = p.name.toLowerCase().includes(search.toLowerCase());
-      const matchesType = filters.type ? p.type === filters.type : true;
+  const filteredProviders = useFilteredProviders(providers, {
+    search,
 
-      const matchesCategory = selectedCategory
-        ? p.specialty === selectedCategory
-        : true;
-
-      const matchesCity = filters.city ? p.city === filters.city : true;
-      const matchesCountry = filters.country
-        ? p.country === filters.country
-        : true;
-
-      const matchesRating =
-        filters.minRating !== null ? p.rating >= filters.minRating : true;
-
-      return (
-        matchesSearch &&
-        matchesCategory &&
-        matchesCity &&
-        matchesRating &&
-        matchesType &&
-        matchesCountry
-      );
-    });
-
-    if (filters.sort === "reviews") {
-      result = [...result].sort((a: any, b: any) => b.reviews - a.reviews);
-    }
-
-    if (filters.sort === "rating") {
-      result = [...result].sort((a, b) => b.rating - a.rating);
-    }
-
-    return result;
-  }, [search, selectedCategory, filters]);
+    ...filters,
+  });
 
   const renderItem = ({ item }: any) => (
     <Pressable
