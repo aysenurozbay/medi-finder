@@ -7,7 +7,7 @@ export const providers: Provider[] = [
     specialty: "general",
     city: "New York",
     country: "USA",
-    rating: 4.9,
+    rating: 3.1,
     verified: true,
   },
   {

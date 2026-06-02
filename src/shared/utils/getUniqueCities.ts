@@ -1,5 +1,5 @@
-import { Provider } from "../../features/providers/types";
+import { ProviderDetail } from "../types/provider";
 
-export const getUniqueCities = (providers: Provider[]) => {
+export const getUniqueCities = (providers: ProviderDetail[]) => {
   return Array.from(new Set(providers.map((p) => p.city)));
 };
