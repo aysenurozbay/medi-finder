@@ -1,14 +1,7 @@
 import { useMemo } from "react";
 import { filterProviders } from "../utils/filterProviders";
 import { ProviderDetail } from "../../../shared/types/provider";
-
-type FilterState = {
-  search: string;
-  city: string | null;
-  country: string | null;
-  type: string | null;
-  minRating: number | null;
-};
+import { FilterState } from "../../filters/types";
 
 export function useFilteredProviders(
   providers: ProviderDetail[],
