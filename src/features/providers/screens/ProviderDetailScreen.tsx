@@ -159,7 +159,7 @@ function Stat({ label, value }: any) {
 const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
-    padding: 16,
+    paddingVertical: 16,
   },
 
   back: { fontSize: 22 },
