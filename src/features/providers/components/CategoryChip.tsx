@@ -17,7 +17,6 @@ export default function CategoryChip({
   color,
   onPress,
 }: Props) {
-  console.log(color);
   return (
     <Pressable
       onPress={onPress}

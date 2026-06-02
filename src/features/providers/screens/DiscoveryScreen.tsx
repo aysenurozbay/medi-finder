@@ -36,14 +36,14 @@ export default function DiscoveryScreen({ navigation }: any) {
   });
 
   const filteredProviders = useMemo(() => {
-    return providers.filter((p) => {
+    let result = providers.filter((p) => {
       const matchesSearch = p.name.toLowerCase().includes(search.toLowerCase());
 
       const matchesCategory = selectedCategory
         ? p.specialty === selectedCategory
         : true;
 
-      const matchesCity = filters.city ? p.city.includes(filters.city) : true;
+      const matchesCity = filters.city ? p.city === filters.city : true;
 
       const matchesRating = filters.minRating
         ? p.rating >= filters.minRating
@@ -51,8 +51,17 @@ export default function DiscoveryScreen({ navigation }: any) {
 
       return matchesSearch && matchesCategory && matchesCity && matchesRating;
     });
-  }, [search, selectedCategory, filters]);
 
+    if (filters.sort === "reviews") {
+      result = result.sort((a: any, b: any) => b.reviews - a.reviews);
+    }
+
+    if (filters.sort === "rating") {
+      result = result.sort((a, b) => b.rating - a.rating);
+    }
+
+    return result;
+  }, [search, selectedCategory, filters]);
   const openFilter = () => {
     navigation.navigate("FilterModal", {
       filters,
