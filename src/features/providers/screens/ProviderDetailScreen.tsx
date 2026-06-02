@@ -7,29 +7,35 @@ import {
   Image,
   Pressable,
 } from "react-native";
-
-import { SafeAreaView } from "react-native-safe-area-context";
-import { providerDetails } from "../services/mockProvider";
-import { getProviderById } from "../../../shared/utils/getProviderById";
-import NotFoundScreen from "../../../shared/components/empty-states/NotFoundScreen";
 import Screen from "../../../shared/components/layout/Screen";
+import EmptyState from "../../../shared/components/ui/EmptyState";
+import { useProviderDetail } from "../hooks/useProviderDetail";
+import Loading from "../../../shared/components/ui/Loading";
 
 export default function ProviderDetailScreen({ route, navigation }: any) {
+  const { id } = route.params;
+
+  const { provider, loading } = useProviderDetail(id);
+
   const [showFullAbout, setShowFullAbout] = useState(false);
-  const { id: providerId } = route.params;
 
-  const provider = getProviderById(providerId);
-
-  console.log("PROVIDER", provider);
+  if (loading) {
+    return (
+      <Screen>
+        <Loading />
+      </Screen>
+    );
+  }
 
   if (!provider) {
     return (
-      <NotFoundScreen
-        title="UPS ... Provider not found"
-        subtitle="The provider you are looking for does not exist or has been removed."
-        onAction={() => navigation.goBack()}
-        actionLabel="Go back"
-      />
+      <Screen>
+        <EmptyState
+          title="No providers found"
+          subtitle="The provider you are looking for does not exist or has been removed.  Please go back and try another one."
+          onAction={() => navigation.goBack()}
+        />
+      </Screen>
     );
   }
 
@@ -46,7 +52,14 @@ export default function ProviderDetailScreen({ route, navigation }: any) {
         {/* PROFILE */}
         <View style={styles.profile}>
           <View style={styles.providerDetail}>
-            <Image source={{ uri: provider.image }} style={styles.avatar} />
+            <Image
+              source={{
+                uri:
+                  provider.image ||
+                  "https://placehold.net/building-400x400.png",
+              }}
+              style={styles.avatar}
+            />
             <View style={styles.info}>
               <Text style={styles.name}>{provider.name}</Text>
               <Text style={styles.sub}>{provider.specialty}</Text>
@@ -78,13 +91,30 @@ export default function ProviderDetailScreen({ route, navigation }: any) {
             </Text>
           </Pressable>
         </View>
+        {/* CERTIFICATIONS */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Certifications</Text>
+
+          <Text numberOfLines={showFullAbout ? undefined : 4}>
+            {provider.certifications.map((cert) => `• ${cert}\n`).join("")}
+          </Text>
+        </View>
 
         {/* CONTACT */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Contact</Text>
-
+          <Text>📍 {provider.contact.address}</Text>
           <Text>📞 {provider.contact.phone}</Text>
           <Text>✉️ {provider.contact.email}</Text>
+        </View>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Working Hours</Text>
+
+          {provider.workingHours.map((item) => (
+            <Text key={item.day}>
+              {item.day}: {item.open} - {item.close}
+            </Text>
+          ))}
         </View>
 
         {/* REVIEWS */}
@@ -100,7 +130,7 @@ export default function ProviderDetailScreen({ route, navigation }: any) {
 
               <Text style={styles.reviewComment}>{review.comment}</Text>
 
-              <Text style={styles.reviewDate}>{review.date}</Text>
+              <Text style={styles.reviewDate}>{review.createdAt}</Text>
             </View>
           ))}
         </View>

@@ -23,6 +23,7 @@ import {
   getUniqueCountries,
 } from "../../../shared/utils/getLocation";
 import Screen from "../../../shared/components/layout/Screen";
+import EmptyState from "../../../shared/components/ui/EmptyState";
 
 /**
  * ✅ TEK VE NET TYPE
@@ -51,14 +52,9 @@ export default function DiscoveryScreen({ navigation }: any) {
 
   const [filterOpen, setFilterOpen] = useState(false);
 
-  /**
-   * ✅ FIX: properly typed state
-   */
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
 
   const openFilter = () => setFilterOpen(true);
-
-  const closeFilter = () => setFilterOpen(false);
 
   const filteredProviders = useMemo(() => {
     let result = providers.filter((p) => {
@@ -199,6 +195,12 @@ export default function DiscoveryScreen({ navigation }: any) {
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.list}
+        ListEmptyComponent={() => (
+          <EmptyState
+            title="No providers found"
+            subtitle="Try changing filters or search terms"
+          />
+        )}
       />
 
       <FilterModal

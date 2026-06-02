@@ -68,7 +68,7 @@ export const providerDetails: ProviderDetail[] = [
 
     about: "Modern clinic offering general healthcare and outpatient services.",
 
-    image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400",
+    image: undefined,
 
     contact: {
       phone: "+90 312 123 4567",
