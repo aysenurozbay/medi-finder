@@ -14,7 +14,8 @@ import { Ionicons } from "@expo/vector-icons";
 import CategoryChip from "../components/CategoryChip";
 import { providers } from "../services/mockProviders";
 import { SPECIALTIES } from "../../../shared/constants/specialties";
-import { Specialty } from "../../../shared/types/provider";
+import { Specialty } from "../types";
+import { PROVIDER } from "../services/mockProvider";
 
 type FilterState = {
   city: string | null;
@@ -62,7 +63,9 @@ export default function DiscoveryScreen({ navigation }: any) {
   const renderItem = ({ item }: any) => (
     <Pressable
       style={styles.card}
-      onPress={() => navigation.navigate("ProviderDetail", { provider: item })}
+      onPress={() =>
+        navigation.navigate("ProviderDetail", { provider: PROVIDER })
+      }
     >
       <Text style={styles.name}>{item.name}</Text>
       <Text style={styles.specialty}>{item.specialty}</Text>

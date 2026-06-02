@@ -1,14 +1,13 @@
-import { Specialty } from "../types";
+import { ProviderDetail } from "../../../shared/types/provider";
 
-export const PROVIDER = {
+export const PROVIDER: ProviderDetail = {
   id: "1",
   name: "Dr. Sarah Mitchell",
-  specialty: "cardiology" as Specialty,
-  location: "New York, NY",
+  specialty: "cardiology",
+  city: "New York",
+  country: "USA",
   rating: 4.9,
-  reviews: 284,
   image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400",
-  verified: true,
   yearsExperience: 15,
   patients: "2,500+",
   satisfaction: 98,
@@ -28,5 +27,29 @@ export const PROVIDER = {
     "Board Certified Cardiologist",
     "Fellow of ACC",
     "Heart Failure Specialist",
+  ],
+
+  reviews: [
+    {
+      id: "r1",
+      userName: "John Doe",
+      rating: 5,
+      comment: "Amazing doctor! Very attentive and professional.",
+      createdAt: "2026-01-10",
+    },
+    {
+      id: "r2",
+      userName: "Emily Stone",
+      rating: 4,
+      comment: "Great experience overall, highly recommended.",
+      createdAt: "2026-01-05",
+    },
+    {
+      id: "r3",
+      userName: "Michael Brown",
+      rating: 5,
+      comment: "Explains everything clearly. Felt very safe.",
+      createdAt: "2025-12-28",
+    },
   ],
 };

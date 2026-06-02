@@ -6,12 +6,11 @@ export type Specialty =
   | "pediatrics"
   | "dermatology";
 
-export type Provider = {
+export type ProviderSummary = {
   id: string;
   name: string;
   specialty: Specialty;
   city: string;
   country: string;
   rating: number;
-  verified: boolean;
 };
