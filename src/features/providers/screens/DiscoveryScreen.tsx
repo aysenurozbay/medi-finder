@@ -16,11 +16,22 @@ import { providers } from "../services/mockProviders";
 import { SPECIALTIES } from "../../../shared/constants/specialties";
 import { Specialty } from "../types";
 import { PROVIDER } from "../services/mockProvider";
+import FilterSheet from "../components/FilterSheet";
+import FilterModal from "../components/FilterSheet";
 
+/**
+ * ✅ TEK VE NET TYPE
+ */
 type FilterState = {
   city: string | null;
   minRating: number | null;
-  sort: "rating" | "reviews" | null;
+  sort: "rating" | "reviews";
+};
+
+const DEFAULT_FILTERS: FilterState = {
+  city: null,
+  minRating: null,
+  sort: "rating",
 };
 
 export default function DiscoveryScreen({ navigation }: any) {
@@ -29,11 +40,16 @@ export default function DiscoveryScreen({ navigation }: any) {
     null,
   );
 
-  const [filters, setFilters] = useState<FilterState>({
-    city: null,
-    minRating: null,
-    sort: "rating",
-  });
+  const [filterOpen, setFilterOpen] = useState(false);
+
+  /**
+   * ✅ FIX: properly typed state
+   */
+  const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
+
+  const openFilter = () => setFilterOpen(true);
+
+  const closeFilter = () => setFilterOpen(false);
 
   const filteredProviders = useMemo(() => {
     let result = providers.filter((p) => {
@@ -45,29 +61,22 @@ export default function DiscoveryScreen({ navigation }: any) {
 
       const matchesCity = filters.city ? p.city === filters.city : true;
 
-      const matchesRating = filters.minRating
-        ? p.rating >= filters.minRating
-        : true;
+      const matchesRating =
+        filters.minRating !== null ? p.rating >= filters.minRating : true;
 
       return matchesSearch && matchesCategory && matchesCity && matchesRating;
     });
 
     if (filters.sort === "reviews") {
-      result = result.sort((a: any, b: any) => b.reviews - a.reviews);
+      result = [...result].sort((a: any, b: any) => b.reviews - a.reviews);
     }
 
     if (filters.sort === "rating") {
-      result = result.sort((a, b) => b.rating - a.rating);
+      result = [...result].sort((a, b) => b.rating - a.rating);
     }
 
     return result;
   }, [search, selectedCategory, filters]);
-  const openFilter = () => {
-    navigation.navigate("FilterModal", {
-      filters,
-      onApply: setFilters,
-    });
-  };
 
   const renderItem = ({ item }: any) => (
     <Pressable
@@ -88,7 +97,6 @@ export default function DiscoveryScreen({ navigation }: any) {
 
   const renderHeader = () => (
     <View>
-      {/* HEADER */}
       <View style={styles.header}>
         <View>
           <Text style={styles.subtitle}>Welcome back</Text>
@@ -96,7 +104,7 @@ export default function DiscoveryScreen({ navigation }: any) {
         </View>
       </View>
 
-      {/* CATEGORY CHIPS */}
+      {/* CATEGORY */}
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -142,7 +150,7 @@ export default function DiscoveryScreen({ navigation }: any) {
           {filters.city && (
             <Text style={styles.filterTag}>📍 {filters.city}</Text>
           )}
-          {filters.minRating && (
+          {filters.minRating !== null && (
             <Text style={styles.filterTag}>⭐ {filters.minRating}+</Text>
           )}
         </View>
@@ -154,16 +162,29 @@ export default function DiscoveryScreen({ navigation }: any) {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* TOP STATIC AREA */}
       <View style={styles.topSection}>{renderHeader()}</View>
 
-      {/* SCROLLABLE LIST */}
       <FlatList
         data={filteredProviders}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.list}
+      />
+
+      <FilterModal
+        visible={filterOpen}
+        onClose={() => setFilterOpen(false)}
+        filters={filters}
+        setFilters={setFilters}
+        cities={[...new Set(providers.map((p) => p.city))]}
+        defaultFilters={{
+          city: null,
+
+          minRating: null,
+
+          sort: "rating",
+        }}
       />
     </SafeAreaView>
   );
