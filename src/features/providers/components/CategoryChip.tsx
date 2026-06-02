@@ -17,6 +17,7 @@ export default function CategoryChip({
   color,
   onPress,
 }: Props) {
+  console.log(color);
   return (
     <Pressable
       onPress={onPress}
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
   },
 
   selected: {
-    borderColor: "#111",
+    borderColor: "#acacac",
     borderWidth: 2,
   },
 

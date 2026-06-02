@@ -10,7 +10,8 @@ export type Provider = {
   id: string;
   name: string;
   specialty: Specialty;
-  location: string;
+  city: string;
+  country: string;
   rating: number;
   verified: boolean;
 };

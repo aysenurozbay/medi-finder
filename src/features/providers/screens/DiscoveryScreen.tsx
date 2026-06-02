@@ -42,9 +42,7 @@ export default function DiscoveryScreen({ navigation }: any) {
         ? p.specialty === selectedCategory
         : true;
 
-      const matchesCity = filters.city
-        ? p.location.includes(filters.city)
-        : true;
+      const matchesCity = filters.city ? p.city.includes(filters.city) : true;
 
       const matchesRating = filters.minRating
         ? p.rating >= filters.minRating
@@ -65,7 +63,9 @@ export default function DiscoveryScreen({ navigation }: any) {
     <Pressable style={styles.card}>
       <Text style={styles.name}>{item.name}</Text>
       <Text style={styles.specialty}>{item.specialty}</Text>
-      <Text style={styles.location}>{item.location}</Text>
+      <Text style={styles.location}>
+        {item.city}, {item.country}
+      </Text>
 
       <Text style={styles.rating}>⭐ {item.rating}</Text>
     </Pressable>
@@ -156,7 +156,7 @@ export default function DiscoveryScreen({ navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F6F3EF",
+    backgroundColor: "#f8f9fa",
   },
 
   topSection: {
@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: "700",
-    marginTop: 10,
+    marginTop: 20,
     marginBottom: 10,
   },
 

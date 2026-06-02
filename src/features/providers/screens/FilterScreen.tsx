@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { View, Text, StyleSheet, Pressable, ScrollView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { providers } from "../services/mockProviders";
+import { getUniqueCities } from "../../../shared/utils/getUniqueCities";
 
 type FilterState = {
   city: string | null;
@@ -9,7 +11,6 @@ type FilterState = {
   sort: "rating" | "reviews";
 };
 
-const CITIES = ["Ankara", "Istanbul", "Izmir"];
 const RATINGS = [4, 4.5, 4.8];
 
 export default function FilterModal({ navigation, route }: any) {
@@ -23,6 +24,10 @@ export default function FilterModal({ navigation, route }: any) {
       sort: "rating",
     },
   );
+
+  const cities = useMemo(() => {
+    return getUniqueCities(providers);
+  }, []);
 
   const toggleCity = (city: string) => {
     setFilters((prev) => ({
@@ -67,7 +72,7 @@ export default function FilterModal({ navigation, route }: any) {
         {/* CITY */}
         <Text style={styles.sectionTitle}>City</Text>
         <View style={styles.row}>
-          {CITIES.map((city) => (
+          {cities.map((city) => (
             <Pressable
               key={city}
               onPress={() => toggleCity(city)}
