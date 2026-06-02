@@ -1,15 +1,16 @@
+export type Specialty =
+  | "general"
+  | "cardiology"
+  | "neurology"
+  | "orthopedics"
+  | "pediatrics"
+  | "dermatology";
+
 export type Provider = {
   id: string;
   name: string;
-  specialty: string;
+  specialty: Specialty;
   location: string;
   rating: number;
   verified: boolean;
-  available: boolean;
-};
-export type Category = {
-  id: string;
-  label: string;
-  icon: keyof typeof import("@expo/vector-icons").Ionicons.glyphMap;
-  color: string;
 };

@@ -1,7 +1,9 @@
+import { Specialty } from "../types";
+
 export const PROVIDER = {
   id: "1",
   name: "Dr. Sarah Mitchell",
-  specialty: "Cardiologist",
+  specialty: "cardiology" as Specialty,
   location: "New York, NY",
   rating: 4.9,
   reviews: 284,

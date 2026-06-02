@@ -13,32 +13,37 @@ import { Ionicons } from "@expo/vector-icons";
 
 import CategoryChip from "../components/CategoryChip";
 import { providers } from "../services/mockProviders";
-import { CATEGORIES } from "../../../shared/constants/categories";
+import { SPECIALTIES } from "../../../shared/constants/specialties";
+import { Specialty } from "../../../shared/types/provider";
 
 type FilterState = {
   city: string | null;
   minRating: number | null;
-  verifiedOnly: boolean;
   sort: "rating" | "reviews" | null;
 };
 
 export default function DiscoveryScreen({ navigation }: any) {
   const [search, setSearch] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-
+  const [selectedCategory, setSelectedCategory] = useState<Specialty | null>(
+    null,
+  );
   const [filters, setFilters] = useState<FilterState>({
     city: null,
     minRating: null,
-    verifiedOnly: false,
     sort: "rating",
   });
 
   const filteredProviders = useMemo(() => {
+    console.log("Filtering providers with:", {
+      search,
+      selectedCategory,
+      filters,
+    });
     return providers.filter((p) => {
       const matchesSearch = p.name.toLowerCase().includes(search.toLowerCase());
 
       const matchesCategory = selectedCategory
-        ? p.id === selectedCategory
+        ? p.specialty === selectedCategory
         : true;
 
       const matchesCity = filters.city
@@ -49,22 +54,9 @@ export default function DiscoveryScreen({ navigation }: any) {
         ? p.rating >= filters.minRating
         : true;
 
-      const matchesVerified = filters.verifiedOnly ? p.verified : true;
-
-      return (
-        matchesSearch &&
-        matchesCategory &&
-        matchesCity &&
-        matchesRating &&
-        matchesVerified
-      );
+      return matchesSearch && matchesCategory && matchesCity && matchesRating;
     });
-    // .sort((a, b) => {
-    //   if (filters.sort === "reviews") return b.reviews - a.reviews;
-    //   return b.rating - a.rating;
-    // });
   }, [search, selectedCategory, filters]);
-
   const openFilter = () => {
     console.log("Opening filter modal with current filters:", filters);
     navigation.navigate("FilterModal", {
@@ -88,18 +80,24 @@ export default function DiscoveryScreen({ navigation }: any) {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.chipContainer}
       >
-        {CATEGORIES.map((cat) => (
-          <CategoryChip
-            key={cat.id}
-            label={cat.label}
-            icon={cat.icon}
-            color={cat.color}
-            selected={selectedCategory === cat.id}
-            onPress={() =>
-              setSelectedCategory(selectedCategory === cat.id ? null : cat.id)
-            }
-          />
-        ))}
+        {Object.entries(SPECIALTIES).map(([key, specialty]) => {
+          const specialtyKey = key as Specialty;
+
+          return (
+            <CategoryChip
+              key={specialtyKey}
+              label={specialty.label}
+              icon={specialty.icon}
+              color={specialty.color}
+              selected={selectedCategory === specialtyKey}
+              onPress={() =>
+                setSelectedCategory(
+                  selectedCategory === specialtyKey ? null : specialtyKey,
+                )
+              }
+            />
+          );
+        })}
       </ScrollView>
 
       {/* SEARCH  AND FİLTER*/}
@@ -115,16 +113,13 @@ export default function DiscoveryScreen({ navigation }: any) {
         </Pressable>
       </View>
       {/* FILTER SUMMARY (opsiyonel ama iyi UX) */}
-      {(filters.city || filters.minRating || filters.verifiedOnly) && (
+      {(filters.city || filters.minRating) && (
         <View style={styles.activeFilters}>
           {filters.city && (
             <Text style={styles.filterTag}>📍 {filters.city}</Text>
           )}
           {filters.minRating && (
             <Text style={styles.filterTag}>⭐ {filters.minRating}+</Text>
-          )}
-          {filters.verifiedOnly && (
-            <Text style={styles.filterTag}>✓ Verified</Text>
           )}
         </View>
       )}
