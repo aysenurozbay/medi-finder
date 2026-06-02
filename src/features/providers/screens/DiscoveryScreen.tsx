@@ -27,6 +27,7 @@ export default function DiscoveryScreen({ navigation }: any) {
   const [selectedCategory, setSelectedCategory] = useState<Specialty | null>(
     null,
   );
+
   const [filters, setFilters] = useState<FilterState>({
     city: null,
     minRating: null,
@@ -34,11 +35,6 @@ export default function DiscoveryScreen({ navigation }: any) {
   });
 
   const filteredProviders = useMemo(() => {
-    console.log("Filtering providers with:", {
-      search,
-      selectedCategory,
-      filters,
-    });
     return providers.filter((p) => {
       const matchesSearch = p.name.toLowerCase().includes(search.toLowerCase());
 
@@ -57,13 +53,23 @@ export default function DiscoveryScreen({ navigation }: any) {
       return matchesSearch && matchesCategory && matchesCity && matchesRating;
     });
   }, [search, selectedCategory, filters]);
+
   const openFilter = () => {
-    console.log("Opening filter modal with current filters:", filters);
     navigation.navigate("FilterModal", {
       filters,
       onApply: setFilters,
     });
   };
+
+  const renderItem = ({ item }: any) => (
+    <Pressable style={styles.card}>
+      <Text style={styles.name}>{item.name}</Text>
+      <Text style={styles.specialty}>{item.specialty}</Text>
+      <Text style={styles.location}>{item.location}</Text>
+
+      <Text style={styles.rating}>⭐ {item.rating}</Text>
+    </Pressable>
+  );
 
   const renderHeader = () => (
     <View>
@@ -74,6 +80,7 @@ export default function DiscoveryScreen({ navigation }: any) {
           <Text style={styles.title}>Find your doctor</Text>
         </View>
       </View>
+
       {/* CATEGORY CHIPS */}
       <ScrollView
         horizontal
@@ -100,7 +107,7 @@ export default function DiscoveryScreen({ navigation }: any) {
         })}
       </ScrollView>
 
-      {/* SEARCH  AND FİLTER*/}
+      {/* SEARCH + FILTER */}
       <View style={styles.searchContainer}>
         <TextInput
           placeholder="Search doctors, clinics..."
@@ -108,11 +115,13 @@ export default function DiscoveryScreen({ navigation }: any) {
           onChangeText={setSearch}
           style={styles.search}
         />
+
         <Pressable style={styles.filterBtn} onPress={openFilter}>
           <Ionicons name="options-outline" size={20} color="#111" />
         </Pressable>
       </View>
-      {/* FILTER SUMMARY (opsiyonel ama iyi UX) */}
+
+      {/* FILTER SUMMARY */}
       {(filters.city || filters.minRating) && (
         <View style={styles.activeFilters}>
           {filters.city && (
@@ -128,23 +137,16 @@ export default function DiscoveryScreen({ navigation }: any) {
     </View>
   );
 
-  const renderItem = ({ item }: any) => (
-    <Pressable style={styles.card}>
-      <Text style={styles.name}>{item.name}</Text>
-      <Text style={styles.specialty}>{item.specialty}</Text>
-      <Text style={styles.location}>{item.location}</Text>
-
-      <Text style={styles.rating}>⭐ {item.rating}</Text>
-    </Pressable>
-  );
-
   return (
     <SafeAreaView style={styles.container}>
+      {/* TOP STATIC AREA */}
+      <View style={styles.topSection}>{renderHeader()}</View>
+
+      {/* SCROLLABLE LIST */}
       <FlatList
         data={filteredProviders}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
-        ListHeaderComponent={renderHeader}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.list}
       />
@@ -157,16 +159,18 @@ const styles = StyleSheet.create({
     backgroundColor: "#F6F3EF",
   },
 
+  topSection: {
+    paddingHorizontal: 16,
+  },
+
   list: {
     paddingHorizontal: 16,
     paddingBottom: 40,
   },
 
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
     marginTop: 10,
+    marginBottom: 6,
   },
 
   subtitle: {
@@ -180,6 +184,25 @@ const styles = StyleSheet.create({
     color: "#111",
   },
 
+  chipContainer: {
+    paddingVertical: 12,
+  },
+
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    marginTop: 10,
+  },
+
+  search: {
+    flex: 1,
+    height: 48,
+    borderRadius: 14,
+    backgroundColor: "#fff",
+    paddingHorizontal: 14,
+  },
+
   filterBtn: {
     width: 44,
     height: 44,
@@ -189,31 +212,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  searchContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-    justifyContent: "space-between",
-    marginTop: 12,
-    marginBottom: 8,
-  },
-  search: {
-    flex: 1,
-    height: 48,
-    borderRadius: 14,
-    backgroundColor: "#fff",
-    paddingHorizontal: 14,
-  },
-
-  chipContainer: {
-    paddingVertical: 12,
-  },
-
   activeFilters: {
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 8,
-    marginBottom: 8,
+    marginTop: 8,
   },
 
   filterTag: {
