@@ -10,7 +10,7 @@ export type Review = {
 
 export type ProviderDetail = ProviderSummary & {
   reviews: Review[];
-  image: string;
+  image?: string;
   yearsExperience: number;
   patients: string;
   satisfaction: number;

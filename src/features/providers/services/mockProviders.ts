@@ -1,6 +1,6 @@
-import { Provider } from "../types";
+import { ProviderSummary } from "../types";
 
-export const providers: Provider[] = [
+export const providers: ProviderSummary[] = [
   {
     id: "1",
     name: "Dr. Sarah Mitchell",
@@ -8,7 +8,6 @@ export const providers: Provider[] = [
     city: "New York",
     country: "USA",
     rating: 3.1,
-    verified: true,
   },
   {
     id: "2",
@@ -17,7 +16,6 @@ export const providers: Provider[] = [
     city: "San Francisco",
     country: "USA",
     rating: 4.8,
-    verified: true,
   },
   {
     id: "3",
@@ -26,7 +24,6 @@ export const providers: Provider[] = [
     city: "Chicago",
     country: "USA",
     rating: 4.7,
-    verified: true,
   },
   {
     id: "4",
@@ -35,7 +32,6 @@ export const providers: Provider[] = [
     city: "Los Angeles",
     country: "USA",
     rating: 4.6,
-    verified: false,
   },
   {
     id: "5",
@@ -44,7 +40,6 @@ export const providers: Provider[] = [
     city: "Boston",
     country: "USA",
     rating: 4.9,
-    verified: true,
   },
   {
     id: "6",
@@ -53,6 +48,5 @@ export const providers: Provider[] = [
     city: "Seattle",
     country: "USA",
     rating: 4.5,
-    verified: true,
   },
 ];
