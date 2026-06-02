@@ -11,11 +11,12 @@ import Screen from "../../../shared/components/layout/Screen";
 import EmptyState from "../../../shared/components/ui/EmptyState";
 import { useProviderDetail } from "../hooks/useProviderDetail";
 import Loading from "../../../shared/components/ui/Loading";
+import ErrorState from "../../../shared/components/ui/ErrorState";
 
 export default function ProviderDetailScreen({ route, navigation }: any) {
   const { id } = route.params;
 
-  const { provider, loading } = useProviderDetail(id);
+  const { provider, loading, error, retry } = useProviderDetail(id);
 
   const [showFullAbout, setShowFullAbout] = useState(false);
 
@@ -27,13 +28,14 @@ export default function ProviderDetailScreen({ route, navigation }: any) {
     );
   }
 
-  if (!provider) {
+  if (error || !provider) {
     return (
       <Screen>
-        <EmptyState
+        <ErrorState
           title="No providers found"
           subtitle="The provider you are looking for does not exist or has been removed.  Please go back and try another one."
-          onAction={() => navigation.goBack()}
+          onRetry={retry}
+          goBack={() => navigation.goBack()}
         />
       </Screen>
     );

@@ -8,14 +8,12 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 
 import CategoryChip from "../components/CategoryChip";
 import { providers } from "../services/mockProviders";
 import { SPECIALTIES } from "../../../shared/constants/specialties";
 import { ProviderType, Specialty } from "../types";
-import { providerDetails as PROVIDER } from "../services/mockProvider";
 import FilterModal from "../components/FilterModal";
 import { getProviderColor } from "../../../shared/utils/getProviderColor";
 import {
