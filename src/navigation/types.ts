@@ -1,4 +1,4 @@
-import { FilterState } from "../shared/types/filter";
+import { FilterState } from "../features/filters/types";
 
 export type RootStackParamList = {
   Discovery: undefined;

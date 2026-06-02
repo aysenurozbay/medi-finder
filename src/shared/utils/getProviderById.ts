@@ -1,4 +1,4 @@
-import { providerDetails } from "../../features/providers/services/mockProvider";
+import { providers } from "../../features/providers/services/mock/providerData";
 
 export const getProviderById = (id: string) =>
-  providerDetails.find((p) => p.id === id) ?? null;
+  providers.find((p) => p.id === id) ?? null;

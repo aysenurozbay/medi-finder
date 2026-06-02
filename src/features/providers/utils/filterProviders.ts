@@ -1,12 +1,5 @@
 import { ProviderDetail } from "../../../shared/types/provider";
-
-type FilterState = {
-  search: string;
-  city: string | null;
-  country: string | null;
-  type: string | null;
-  minRating: number | null;
-};
+import { FilterState } from "../../filters/types";
 
 export function filterProviders(
   providers: ProviderDetail[],
@@ -24,6 +17,7 @@ export function filterProviders(
     if (filters.country && p.country !== filters.country) return false;
     if (filters.type && p.type !== filters.type) return false;
     if (filters.minRating && p.rating < filters.minRating) return false;
+    if (filters.specialty && p.specialty !== filters.specialty) return false;
 
     return true;
   });

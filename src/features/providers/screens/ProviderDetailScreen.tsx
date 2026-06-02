@@ -12,6 +12,7 @@ import EmptyState from "../../../shared/components/ui/EmptyState";
 import { useProviderDetail } from "../hooks/useProviderDetail";
 import Loading from "../../../shared/components/ui/Loading";
 import ErrorState from "../../../shared/components/ui/ErrorState";
+import ProviderCardSkeleton from "../../../shared/components/ui/skeleton/ProviderCardSkeleton";
 
 export default function ProviderDetailScreen({ route, navigation }: any) {
   const { id } = route.params;
@@ -23,7 +24,9 @@ export default function ProviderDetailScreen({ route, navigation }: any) {
   if (loading) {
     return (
       <Screen>
-        <Loading />
+        {Array.from({ length: 6 }).map((_, i) => (
+          <ProviderCardSkeleton key={i} />
+        ))}
       </Screen>
     );
   }

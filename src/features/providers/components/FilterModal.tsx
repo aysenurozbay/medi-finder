@@ -9,14 +9,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { ProviderType } from "../types";
-
-type FilterState = {
-  city: string | null;
-  country: string | null;
-  minRating: number | null;
-  sort: "rating" | "reviews";
-  type: ProviderType | null;
-};
+import { FilterState } from "../../filters/types";
 
 type Props = {
   visible: boolean;

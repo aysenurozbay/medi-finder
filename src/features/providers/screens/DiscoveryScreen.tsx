@@ -12,7 +12,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 import CategoryChip from "../components/CategoryChip";
 import { SPECIALTIES } from "../../../shared/constants/specialties";
-import { ProviderType, Specialty } from "../types";
+import { Specialty } from "../types";
 import FilterModal from "../components/FilterModal";
 import { getProviderColor } from "../../../shared/utils/getProviderColor";
 import {
@@ -23,41 +23,26 @@ import Screen from "../../../shared/components/layout/Screen";
 import EmptyState from "../../../shared/components/ui/EmptyState";
 import { useFilteredProviders } from "../hooks/useFilteredProviders";
 import { providers } from "../services/mock/providerData";
-
-/**
- * ✅ TEK VE NET TYPE
- */
-type FilterState = {
-  city: string | null;
-  country: string | null;
-  minRating: number | null;
-  sort: "rating" | "reviews";
-  type: ProviderType | null;
-};
-
-const DEFAULT_FILTERS: FilterState = {
-  city: null,
-  country: null,
-  minRating: null,
-  sort: "rating",
-  type: null,
-};
+import { DEFAULT_FILTERS } from "../../filters/defaultFilters";
+import { FilterState } from "../../filters/types";
 
 export default function DiscoveryScreen({ navigation }: any) {
-  const [search, setSearch] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<Specialty | null>(
-    null,
-  );
-
   const [filterOpen, setFilterOpen] = useState(false);
 
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
 
   const openFilter = () => setFilterOpen(true);
 
-  const filteredProviders = useFilteredProviders(providers, {
-    search,
+  const setCategory = (specialty: Specialty) => {
+    console.log("Setting category to", specialty);
+    setFilters((prev) => ({
+      ...prev,
 
+      specialty: prev.specialty === specialty ? null : specialty,
+    }));
+  };
+
+  const filteredProviders = useFilteredProviders(providers, {
     ...filters,
   });
 
@@ -100,22 +85,18 @@ export default function DiscoveryScreen({ navigation }: any) {
               label={specialty.label}
               icon={specialty.icon}
               color={specialty.color}
-              selected={selectedCategory === specialtyKey}
-              onPress={() =>
-                setSelectedCategory(
-                  selectedCategory === specialtyKey ? null : specialtyKey,
-                )
-              }
+              selected={filters.specialty === specialtyKey}
+              onPress={() => setCategory(specialtyKey)}
             />
           );
         })}
       </ScrollView>
       <View style={styles.searchContainer}>
         <TextInput
-          placeholder="Search doctors, clinics..."
-          value={search}
-          onChangeText={setSearch}
+          placeholder="Search by name, specialty, etc."
           style={styles.search}
+          value={filters.search}
+          onChangeText={(text) => setFilters((p) => ({ ...p, search: text }))}
         />
 
         <Pressable style={styles.filterBtn} onPress={openFilter}>
@@ -177,13 +158,7 @@ export default function DiscoveryScreen({ navigation }: any) {
         setFilters={setFilters}
         cities={getUniqueCities(providers)}
         countries={getUniqueCountries(providers)}
-        defaultFilters={{
-          city: null,
-          minRating: null,
-          sort: "rating",
-          country: null,
-          type: null,
-        }}
+        defaultFilters={DEFAULT_FILTERS}
       />
     </Screen>
   );
