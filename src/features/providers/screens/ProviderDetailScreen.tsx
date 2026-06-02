@@ -9,13 +9,32 @@ import {
 } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
+import { providerDetails } from "../services/mockProvider";
+import { getProviderById } from "../../../shared/utils/getProviderById";
+import NotFoundScreen from "../../../shared/components/empty-states/NotFoundScreen";
+import Screen from "../../../shared/components/layout/Screen";
 
 export default function ProviderDetailScreen({ route, navigation }: any) {
   const [showFullAbout, setShowFullAbout] = useState(false);
-  const { provider } = route.params;
+  const { id: providerId } = route.params;
+
+  const provider = getProviderById(providerId);
+
+  console.log("PROVIDER", provider);
+
+  if (!provider) {
+    return (
+      <NotFoundScreen
+        title="UPS ... Provider not found"
+        subtitle="The provider you are looking for does not exist or has been removed."
+        onAction={() => navigation.goBack()}
+        actionLabel="Go back"
+      />
+    );
+  }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <Screen>
       {/* HEADER */}
       <View style={styles.header}>
         <Pressable onPress={() => navigation.goBack()}>
@@ -32,7 +51,7 @@ export default function ProviderDetailScreen({ route, navigation }: any) {
               <Text style={styles.name}>{provider.name}</Text>
               <Text style={styles.sub}>{provider.specialty}</Text>
               <Text style={styles.meta}>
-                📍 {provider.location} • ⭐ {provider.rating}
+                📍 {provider.city}, {provider.country} • ⭐ {provider.rating}
               </Text>
             </View>
           </View>
@@ -42,7 +61,7 @@ export default function ProviderDetailScreen({ route, navigation }: any) {
         <View style={styles.stats}>
           <Stat label="Experience" value={`${provider.yearsExperience}+`} />
           <Stat label="Patients" value={provider.patients} />
-          <Stat label="Satisfaction" value={`${provider.satisfaction}%`} />
+          <Stat label="Satisfaction" value={`${provider.satisfactionRate}%`} />
         </View>
 
         {/* ABOUT */}
@@ -93,7 +112,7 @@ export default function ProviderDetailScreen({ route, navigation }: any) {
           <Text style={{ color: "#fff" }}>Book</Text>
         </Pressable>
       </View>
-    </SafeAreaView>
+    </Screen>
   );
 }
 
@@ -108,8 +127,6 @@ function Stat({ label, value }: any) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
-
   header: {
     flexDirection: "row",
     padding: 16,

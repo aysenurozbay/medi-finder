@@ -9,17 +9,34 @@ export type Review = {
 };
 
 export type ProviderDetail = ProviderSummary & {
-  reviews: Review[];
+  reviews?: Review[];
   image?: string;
   yearsExperience: number;
-  patients: string;
-  satisfaction: number;
+
+  patients: number;
+
+  satisfactionRate: number; // 0–100
+
   about: string;
-  workingHours: { day: string; hours: string }[];
+
+  workingHours: {
+    day:
+      | "monday"
+      | "tuesday"
+      | "wednesday"
+      | "thursday"
+      | "friday"
+      | "saturday"
+      | "sunday";
+    open: string;
+    close: string;
+  }[];
+
   contact: {
     phone: string;
     email: string;
     address: string;
   };
+
   certifications: string[];
 };

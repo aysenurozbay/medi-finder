@@ -1,3 +1,5 @@
+export type ProviderType = "doctor" | "clinic" | "hospital";
+
 export type Specialty =
   | "general"
   | "cardiology"
@@ -9,6 +11,7 @@ export type Specialty =
 export type ProviderSummary = {
   id: string;
   name: string;
+  type: ProviderType;
   specialty: Specialty;
   city: string;
   country: string;

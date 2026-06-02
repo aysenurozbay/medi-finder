@@ -8,11 +8,14 @@ import {
   StyleSheet,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { ProviderType } from "../types";
 
 type FilterState = {
   city: string | null;
+  country: string | null;
   minRating: number | null;
   sort: "rating" | "reviews";
+  type: ProviderType | null;
 };
 
 type Props = {
@@ -21,15 +24,16 @@ type Props = {
   filters: FilterState;
   setFilters: React.Dispatch<React.SetStateAction<FilterState>>;
   cities: string[];
+  countries: string[];
   defaultFilters: FilterState;
 };
-
 export default function FilterModal({
   visible,
   onClose,
   filters,
   setFilters,
   cities,
+  countries,
   defaultFilters,
 }: Props) {
   return (
@@ -56,6 +60,64 @@ export default function FilterModal({
           </View>
 
           <ScrollView showsVerticalScrollIndicator={false}>
+            {/* TYPE */}
+            <Text style={styles.sectionTitle}>Provider Type</Text>
+
+            <View style={styles.row}>
+              {(["doctor", "clinic", "hospital"] as const).map((t) => (
+                <Pressable
+                  key={t}
+                  onPress={() =>
+                    setFilters((prev) => ({
+                      ...prev,
+                      type: prev.type === t ? null : t,
+                    }))
+                  }
+                  style={[styles.chip, filters.type === t && styles.chipActive]}
+                >
+                  <Text
+                    style={[
+                      styles.chipText,
+                      filters.type === t && styles.chipTextActive,
+                    ]}
+                  >
+                    {t === "doctor"
+                      ? "Doctor"
+                      : t === "clinic"
+                        ? "Clinic"
+                        : "Hospital"}
+                  </Text>
+                </Pressable>
+              ))}
+            </View>
+            {/* COUNTRY */}
+            <Text style={styles.sectionTitle}>Country</Text>
+            <View style={styles.row}>
+              {countries.map((c) => (
+                <Pressable
+                  key={c}
+                  onPress={() =>
+                    setFilters((prev) => ({
+                      ...prev,
+                      country: prev.country === c ? null : c,
+                    }))
+                  }
+                  style={[
+                    styles.chip,
+                    filters.country === c && styles.chipActive,
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.chipText,
+                      filters.country === c && styles.chipTextActive,
+                    ]}
+                  >
+                    {c}
+                  </Text>
+                </Pressable>
+              ))}
+            </View>
             {/* CITY */}
             <Text style={styles.sectionTitle}>City</Text>
             <View style={styles.row}>

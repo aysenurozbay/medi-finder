@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   View,
   Text,
@@ -14,24 +14,33 @@ import { Ionicons } from "@expo/vector-icons";
 import CategoryChip from "../components/CategoryChip";
 import { providers } from "../services/mockProviders";
 import { SPECIALTIES } from "../../../shared/constants/specialties";
-import { Specialty } from "../types";
-import { PROVIDER } from "../services/mockProvider";
-import FilterSheet from "../components/FilterSheet";
-import FilterModal from "../components/FilterSheet";
+import { ProviderType, Specialty } from "../types";
+import { providerDetails as PROVIDER } from "../services/mockProvider";
+import FilterModal from "../components/FilterModal";
+import { getProviderColor } from "../../../shared/utils/getProviderColor";
+import {
+  getUniqueCities,
+  getUniqueCountries,
+} from "../../../shared/utils/getLocation";
+import Screen from "../../../shared/components/layout/Screen";
 
 /**
  * ✅ TEK VE NET TYPE
  */
 type FilterState = {
   city: string | null;
+  country: string | null;
   minRating: number | null;
   sort: "rating" | "reviews";
+  type: ProviderType | null;
 };
 
 const DEFAULT_FILTERS: FilterState = {
   city: null,
+  country: null,
   minRating: null,
   sort: "rating",
+  type: null,
 };
 
 export default function DiscoveryScreen({ navigation }: any) {
@@ -54,17 +63,28 @@ export default function DiscoveryScreen({ navigation }: any) {
   const filteredProviders = useMemo(() => {
     let result = providers.filter((p) => {
       const matchesSearch = p.name.toLowerCase().includes(search.toLowerCase());
+      const matchesType = filters.type ? p.type === filters.type : true;
 
       const matchesCategory = selectedCategory
         ? p.specialty === selectedCategory
         : true;
 
       const matchesCity = filters.city ? p.city === filters.city : true;
+      const matchesCountry = filters.country
+        ? p.country === filters.country
+        : true;
 
       const matchesRating =
         filters.minRating !== null ? p.rating >= filters.minRating : true;
 
-      return matchesSearch && matchesCategory && matchesCity && matchesRating;
+      return (
+        matchesSearch &&
+        matchesCategory &&
+        matchesCity &&
+        matchesRating &&
+        matchesType &&
+        matchesCountry
+      );
     });
 
     if (filters.sort === "reviews") {
@@ -80,10 +100,8 @@ export default function DiscoveryScreen({ navigation }: any) {
 
   const renderItem = ({ item }: any) => (
     <Pressable
-      style={styles.card}
-      onPress={() =>
-        navigation.navigate("ProviderDetail", { provider: PROVIDER })
-      }
+      style={[styles.card, getProviderColor(item.type)]}
+      onPress={() => navigation.navigate("ProviderDetail", { id: item.id })}
     >
       <Text style={styles.name}>{item.name}</Text>
       <Text style={styles.specialty}>{item.specialty}</Text>
@@ -129,8 +147,6 @@ export default function DiscoveryScreen({ navigation }: any) {
           );
         })}
       </ScrollView>
-
-      {/* SEARCH + FILTER */}
       <View style={styles.searchContainer}>
         <TextInput
           placeholder="Search doctors, clinics..."
@@ -145,10 +161,23 @@ export default function DiscoveryScreen({ navigation }: any) {
       </View>
 
       {/* FILTER SUMMARY */}
-      {(filters.city || filters.minRating) && (
+      {(filters.city || filters.minRating || filters.country) && (
         <View style={styles.activeFilters}>
+          {filters.type && (
+            <Text style={styles.filterTag}>
+              {filters.type === "doctor"
+                ? "Doctor"
+                : filters.type === "clinic"
+                  ? "Clinic"
+                  : "Hospital"}
+            </Text>
+          )}
           {filters.city && (
             <Text style={styles.filterTag}>📍 {filters.city}</Text>
+          )}
+
+          {filters.country && (
+            <Text style={styles.filterTag}>🏳️ {filters.country}</Text>
           )}
           {filters.minRating !== null && (
             <Text style={styles.filterTag}>⭐ {filters.minRating}+</Text>
@@ -161,7 +190,7 @@ export default function DiscoveryScreen({ navigation }: any) {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <Screen>
       <View style={styles.topSection}>{renderHeader()}</View>
 
       <FlatList
@@ -177,16 +206,17 @@ export default function DiscoveryScreen({ navigation }: any) {
         onClose={() => setFilterOpen(false)}
         filters={filters}
         setFilters={setFilters}
-        cities={[...new Set(providers.map((p) => p.city))]}
+        cities={getUniqueCities(providers)}
+        countries={getUniqueCountries(providers)}
         defaultFilters={{
           city: null,
-
           minRating: null,
-
           sort: "rating",
+          country: null,
+          type: null,
         }}
       />
-    </SafeAreaView>
+    </Screen>
   );
 }
 const styles = StyleSheet.create({
@@ -195,12 +225,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#f8f9fa",
   },
 
-  topSection: {
-    paddingHorizontal: 16,
-  },
+  topSection: {},
 
   list: {
-    paddingHorizontal: 16,
     paddingBottom: 40,
   },
 

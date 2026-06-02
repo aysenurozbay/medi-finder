@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { View, Text, StyleSheet, Pressable, ScrollView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { providers } from "../services/mockProviders";
-import { getUniqueCities } from "../../../shared/utils/getUniqueCities";
+import { getUniqueCities } from "../../../shared/utils/getLocation";
 
 type FilterState = {
   city: string | null;
