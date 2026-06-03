@@ -26,12 +26,13 @@ import { providers } from "../services/mock/providerData";
 import { DEFAULT_FILTERS } from "../../filters/defaultFilters";
 import { FilterState } from "../../filters/types";
 import LoadingState from "../../../shared/components/ui/Loading";
+import { useOfflineMock } from "@/shared/hooks/useOfflineMock";
 
 export default function DiscoveryScreen({ navigation }: any) {
   const [filterOpen, setFilterOpen] = useState(false);
-
+  const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
-
+  const isOffline = useOfflineMock();
   const openFilter = () => setFilterOpen(true);
 
   const setCategory = (specialty: Specialty) => {
@@ -44,7 +45,6 @@ export default function DiscoveryScreen({ navigation }: any) {
   const filteredProviders = useFilteredProviders(providers, {
     ...filters,
   });
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -140,6 +140,14 @@ export default function DiscoveryScreen({ navigation }: any) {
       <Text style={styles.sectionTitle}>Top Rated</Text>
     </View>
   );
+
+  if (isOffline) {
+    return (
+      <Screen>
+        <EmptyState title="You're offline" subtitle="Please try again" />
+      </Screen>
+    );
+  }
 
   if (loading) {
     return (
