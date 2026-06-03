@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { providerDetails } from "../services/mockProvider";
 import { ProviderDetail } from "../../../shared/types/provider";
 import { getProviderById } from "../../../shared/utils/getProviderById";
 

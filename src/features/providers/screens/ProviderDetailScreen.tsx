@@ -24,7 +24,7 @@ export default function ProviderDetailScreen({ route, navigation }: any) {
   if (loading) {
     return (
       <Screen>
-        {Array.from({ length: 6 }).map((_, i) => (
+        {Array.from({ length: 2 }).map((_, i) => (
           <ProviderCardSkeleton key={i} />
         ))}
       </Screen>

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   View,
   Text,
@@ -25,6 +25,7 @@ import { useFilteredProviders } from "../hooks/useFilteredProviders";
 import { providers } from "../services/mock/providerData";
 import { DEFAULT_FILTERS } from "../../filters/defaultFilters";
 import { FilterState } from "../../filters/types";
+import LoadingState from "../../../shared/components/ui/Loading";
 
 export default function DiscoveryScreen({ navigation }: any) {
   const [filterOpen, setFilterOpen] = useState(false);
@@ -34,10 +35,8 @@ export default function DiscoveryScreen({ navigation }: any) {
   const openFilter = () => setFilterOpen(true);
 
   const setCategory = (specialty: Specialty) => {
-    console.log("Setting category to", specialty);
     setFilters((prev) => ({
       ...prev,
-
       specialty: prev.specialty === specialty ? null : specialty,
     }));
   };
@@ -45,6 +44,15 @@ export default function DiscoveryScreen({ navigation }: any) {
   const filteredProviders = useFilteredProviders(providers, {
     ...filters,
   });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const renderItem = ({ item }: any) => (
     <Pressable
@@ -132,6 +140,14 @@ export default function DiscoveryScreen({ navigation }: any) {
       <Text style={styles.sectionTitle}>Top Rated</Text>
     </View>
   );
+
+  if (loading) {
+    return (
+      <Screen>
+        <LoadingState text="Finding the best providers..." />{" "}
+      </Screen>
+    );
+  }
 
   return (
     <Screen>
