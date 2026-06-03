@@ -9,7 +9,6 @@ A clean and scalable React Native application that demonstrates a provider disco
 <p align="center">
   <img src="assets/screenrecording.gif" width="300" alt="MediFinder Demo" />
 </p>
----
 
 ## 🚀 Overview
 
@@ -124,8 +123,11 @@ A simulated loading state is implemented to improve UX realism.
 * Fake delay (500–1000ms)
 * Loading screen shown before data render
 
-   ```ts <LoadingState text="Loading your results..." /> ```ts
+```tsx
 
+<LoadingState text="Loading your results..." />
+
+```
 📭 Empty State
 
 When no providers match filters:
