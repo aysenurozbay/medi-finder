@@ -166,7 +166,9 @@ test("filters providers by city", () => {
 
   expect(result).toHaveLength(1);
   expect(result[0].city).toBe("Ankara");
-});```
+});
+
+```
 
 ## 🧪 Testing & Bonus Scope Decisions
 
