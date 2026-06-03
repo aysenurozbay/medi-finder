@@ -36,6 +36,7 @@ The main goal is to demonstrate:
 
 Feature-based architecture is used for scalability and separation of concerns.
 
+```text
 src/
 ├── features/
 │   ├── providers/
@@ -52,6 +53,7 @@ src/
 │       ├── utils/
 │       └── types/
 ├── navigation/
+```
 
 
 ### Design Decisions
@@ -70,8 +72,8 @@ src/
 - Centralized `FilterState` for filtering logic
 - Derived provider list via custom hook:
 
-```ts
-useFilteredProviders(providers, filters)
+```ts useFilteredProviders(providers, filters)  ```ts
+
 This ensures clean separation between UI and business logic.
 
 
@@ -115,7 +117,8 @@ A simulated loading state is implemented to improve UX realism.
 
 * Fake delay (500–1000ms)
 * Loading screen shown before data render
-    <LoadingState text="Loading your results..." />
+
+   ```ts <LoadingState text="Loading your results..." /> ```ts
 
 📭 Empty State
 
