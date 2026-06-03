@@ -135,3 +135,65 @@ When no providers match filters:
 * Friendly empty state UI
 * Suggests changing filters or search terms
 
+## 🧪 Testing
+
+This project includes example unit tests for core business logic.
+
+Tests focus on:
+- Provider filtering logic
+- Search functionality
+- Edge cases (empty results, null filters)
+
+### Example
+
+```ts
+import { filterProviders } from "./filterProviders";
+
+const mockProviders = [
+  { id: "1", name: "Dr. A", city: "Ankara", country: "TR", type: "doctor", rating: 4.5, specialty: "cardiology" },
+  { id: "2", name: "Clinic B", city: "Istanbul", country: "TR", type: "clinic", rating: 3.9, specialty: "dermatology" },
+];
+
+test("filters providers by city", () => {
+  const result = filterProviders(mockProviders, {
+    city: "Ankara",
+    country: null,
+    type: null,
+    minRating: null,
+    search: "",
+    specialty: null,
+  });
+
+  expect(result).toHaveLength(1);
+  expect(result[0].city).toBe("Ankara");
+});```
+
+## 🧪 Testing & Bonus Scope Decisions
+
+The project includes example unit tests covering core business logic (especially provider filtering logic in `filterProviders`).
+
+Due to dependency conflicts in the current Expo + React setup, a full test runner configuration (Jest / React Native Testing Library) was not activated to avoid introducing instability to the project environment.
+
+Instead, the application was designed with testable pure functions, allowing business logic to be tested independently from the UI layer.
+
+### Example Test Coverage
+
+- Filter providers by city
+- Filter by country
+- Filter by specialty
+- Search-based filtering
+- Edge case handling (empty results, null filters)
+
+A sample test file is included in the repository under the relevant feature folder, demonstrating unit test structure and expected behavior.
+
+---
+
+### Bonus Scope Decisions
+
+To keep the project lightweight and stable within Expo constraints:
+
+- Offline support was implemented as a simplified UX state instead of adding native networking dependencies (e.g. NetInfo).
+- External testing frameworks were not executed but test structure was prepared.
+- Additional tooling (e.g. aliasing / module resolvers) was intentionally minimized to avoid dependency resolution issues in the current setup.
+
+These decisions were made intentionally to prioritize application stability, clarity of architecture, and smooth reviewability.
