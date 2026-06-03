@@ -124,5 +124,7 @@ When no providers match filters:
 * Friendly empty state UI
 * Suggests changing filters or search terms
 
+---
 🎥 Demo
+![MediFinder Screen Recording](./assets/screenrecording.gif)
 
