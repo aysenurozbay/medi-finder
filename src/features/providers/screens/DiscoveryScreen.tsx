@@ -144,7 +144,7 @@ export default function DiscoveryScreen({ navigation }: any) {
   if (loading) {
     return (
       <Screen>
-        <LoadingState text="Finding the best providers..." />{" "}
+        <LoadingState text="Finding the best providers..." />
       </Screen>
     );
   }
