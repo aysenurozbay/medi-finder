@@ -3,6 +3,10 @@
 A clean and scalable React Native application that demonstrates a provider discovery flow with filtering, search, and detail navigation.
 
 ![MediFinder](./assets/MediFinder.png)
+
+---
+🎥 Demo
+![MediFinder Screen Recording](./assets/screenrecording.gif)
 ---
 
 ## 🚀 Overview
@@ -126,8 +130,4 @@ When no providers match filters:
 
 * Friendly empty state UI
 * Suggests changing filters or search terms
-
----
-🎥 Demo
-![MediFinder Screen Recording](./assets/screenrecording.gif)
 
