@@ -6,7 +6,9 @@ A clean and scalable React Native application that demonstrates a provider disco
 
 ---
 🎥 Demo
-![MediFinder Screen Recording](./assets/screenrecording.gif)
+<p align="center">
+  <img src="assets/screenrecording.gif" width="300" alt="MediFinder Demo" />
+</p>
 ---
 
 ## 🚀 Overview
