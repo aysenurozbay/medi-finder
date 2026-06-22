@@ -26,6 +26,22 @@ The main goal is to demonstrate:
 - Maintainable code structure
 
 ---
+A smart information retrieval and search assistant application.
+
+## What it does
+Users can search structured data through a unified interface.
+
+## Key contributions
+- Search UI implementation
+- API integration layer
+- Data response handling
+- Frontend architecture
+
+## Focus
+- Information retrieval UX
+- API-driven frontend design
+
+---
 
 ## 🧱 Tech Stack
 
